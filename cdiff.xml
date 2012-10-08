@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf8"?>
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
  "/usr/share/sgml/docbook/dtd/xml/4.1.2/docbookx.dtd" [
  <!ENTITY diff "<command>diff</command>">
@@ -9,9 +9,25 @@
      by eric raymond -->
 
 <refentry id='cdiff.1'>
+  <refentryinfo>
+    <authorgroup>
+        <author>
+            <firstname>Ville</firstname>
+            <surname>Skyttä</surname>
+            <contrib>cdiff author</contrib>
+        </author>
+        <author>
+            <firstname>Dave</firstname>
+            <surname>Ewart</surname>
+            <contrib>colordiff author, Debian packager for colordiff/cdiff</contrib>
+        </author>
+    </authorgroup>
+    <productname>cdiff</productname>
+  </refentryinfo>
   <refmeta>
     <refentrytitle>cdiff</refentrytitle>
     <manvolnum>1</manvolnum>
+    <refmiscinfo class="manual">User Commands</refmiscinfo>
   </refmeta>
 
   <refnamediv id='name'>
