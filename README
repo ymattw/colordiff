@@ -4,7 +4,7 @@ colordiff — a tool to colorize diff output
 
 Synopsis
 
-colordiff [diff options] {file1} {file2}
+colordiff [diff options] [colordiff options] {file1} {file2}
 
 Description
 
@@ -24,7 +24,7 @@ should be broadly portable to other systems.
 
 Usage
 
-Use colordiff wherever you would normally use diff, or pipe output to
+Use colordiff wherever you would normally use diff, or instead pipe output to 
 colordiff:
 
 For example:
@@ -49,7 +49,15 @@ following line to ~/.bashrc (or equivalent):
 
 alias diff=colordiff
 
-Any options passed to colordiff are passed through to diff.
+Any options passed to colordiff are passed through to diff except for the
+colordiff-specific option 'difftype', e.g.
+
+colordiff --difftype=debdiff file1 file2
+
+Valid values for 'difftype' are: diff, diffc, diffu, diffy, wdiff, debdiff;
+these correspond to plain diffs, context diffs, unified diffs, side-by-side
+diffs, wdiff output and debdiff output respectively. Use these overrides when
+colordiff is not able to determine the diff-type automatically.
 
 Alternatively, a construct such as 'cvs diff SOMETHING | colordiff' can be
 included in ~/.bashrc as follows:
@@ -61,16 +69,6 @@ Or, combining the idea above using 'less':
 function cvsdiff () { cvs diff $@ | colordiff |less -R; }
 
 Note that the function name, cvsdiff, can be customized.
-
-Any options passed to colordiff are passed through to diff except for
-the colordiff-specific option 'difftype', e.g.
-
-colordiff --difftype=debdiff file1 file2
-
-Valid values for 'difftype' are: diff, diffc, diffu, diffy, wdiff, debdiff;
-these correspond to plain diffs, context diffs, unified diffs, side-by-side
-diffs, wdiff output and debdiff output respectively.  Use these overrides when
-colordiff is not able to determine the diff-type automatically.
 
 Files
 
@@ -93,5 +91,5 @@ Author
 colordiff is written and maintained by Dave Ewart <davee@sungate.co.uk>. This
 manual page and the source XML was written by Graham Wilson <graham@mknod.org>
 for Debian and is maintained by the author. Dave Ewart maintains the Debian
-package.
+package, sponsored by Colin Tuckley.
 
