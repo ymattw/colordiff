@@ -18,7 +18,6 @@ doc: colordiff.xml cdiff.xml
 	perl -p -i -e 's#<head>#<head><link rel=\"stylesheet\" type=\"text/css\" href=\"colordiff.css\">#' colordiff.html
 	perl -p -i -e 's#</body>#</div></body>#' colordiff.html
 	perl -p -i -e 's#<div class=\"refentry\"#<div id=\"content\"><div class=\"refentry\"#' colordiff.html
-	mv colordiff.html ../htdocs
 
 install:
 	install -d ${DESTDIR}${INSTALL_DIR}
