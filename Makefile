@@ -3,7 +3,7 @@ MAN_DIR=/usr/local/man/man1
 ETC_DIR=/etc
 VERSION=$(shell egrep '^my .version' colordiff.pl |cut -f 2 -d "'")
 DIST_FILES=COPYING INSTALL Makefile README \
-	colordiff.pl colordiffrc colordiffrc-lightbg cdiff.sh BUGS TODO CHANGES colordiff.1 \
+	colordiff.pl colordiffrc colordiffrc-lightbg cdiff.sh BUGS CHANGES colordiff.1 \
 	colordiff.xml cdiff.xml cdiff.1
 TMPDIR=colordiff-${VERSION}
 TARBALL=${TMPDIR}.tar.gz
