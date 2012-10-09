@@ -61,8 +61,8 @@ OpenBSD, but should be broadly portable to other systems.</para>
 
 <refsect1 id="usage"><title>Usage</title>
 
-<para>Use &colordiff; wherever you would normally use &diff;, or pipe output
-to &colordiff;:</para>
+<para>Use &colordiff; wherever you would normally use &diff;, or instead
+pipe output to &colordiff;:</para>
 
 <para>For example:
 
