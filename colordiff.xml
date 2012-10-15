@@ -16,6 +16,16 @@
             <surname>Ewart</surname>
             <contrib>colordiff author and Debian packager</contrib>
         </author>
+        <author>
+            <firstname>Graham</firstname>
+            <surname>Wilson</surname>
+            <contrib>Manual page and XML source author</contrib>
+        </author>
+        <author>
+            <firstname>Colin</firstname>
+            <surname>Tuckley</surname>
+            <contrib>Debian package sponsor</contrib>
+        </author>
     </authorgroup>
     <productname>colordiff</productname>
   </refentryinfo>
@@ -156,16 +166,6 @@ function cvsdiff () { cvs diff $@ | colordiff |less -R; }
 
 <para>Bug reports and suggestions/patches to <email>davee@sungate.co.uk</email>
 please.</para>
-
-</refsect1>
-
-<refsect1 id='author'><title>Author</title>
-
-<para>&colordiff; is written and maintained by Dave Ewart
-<email>davee@sungate.co.uk</email>. This manual page and the
-source XML was written by Graham Wilson <email>graham@mknod.org</email> for
-Debian and is maintained by the author.  Dave Ewart maintains the Debian
-package, sponsored by Colin Tuckley.</para>
 
 </refsect1>
 

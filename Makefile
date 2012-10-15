@@ -52,5 +52,8 @@ dist:
 	tar -zcvf ${TARBALL} ${TMPDIR}
 	rm -fR ${TMPDIR}
 
+gitclean:
+	rm -f colordiff.1 colordiff.html cdiff.1
+
 clean:
 	rm -f README colordiff.1 colordiff.html cdiff.1

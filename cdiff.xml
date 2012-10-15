@@ -19,7 +19,7 @@
         <author>
             <firstname>Dave</firstname>
             <surname>Ewart</surname>
-            <contrib>colordiff author, Debian packager for colordiff/cdiff</contrib>
+            <contrib>colordiff author, packager for colordiff/cdiff</contrib>
         </author>
     </authorgroup>
     <productname>cdiff</productname>

@@ -108,5 +108,9 @@ Support for xz in cdiff, patch by Ville Skyttä; code cleanup from Akim Demaille;
 patch to provide custom diff command from Rainer Nagel.  Improved wdiff support
 inspired by patch from Peter van Dijk.  Improved debdiff detection.
 
+Changes between version 1.0.11 and 1.0.12
+
+Packaging refactoring and minor packaging fixes.
+
 # vim: tw=72
 

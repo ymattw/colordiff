@@ -86,10 +86,3 @@ Bugs
 
 Bug reports and suggestions/patches to <davee@sungate.co.uk> please.
 
-Author
-
-colordiff is written and maintained by Dave Ewart <davee@sungate.co.uk>. This
-manual page and the source XML was written by Graham Wilson <graham@mknod.org>
-for Debian and is maintained by the author. Dave Ewart maintains the Debian
-package, sponsored by Colin Tuckley.
-
