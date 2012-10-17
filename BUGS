@@ -1,6 +1,6 @@
 Bugs and limitations
 
-There is always the possibility of colour selections (either the defaults
+There is always the possibility that colour selections (either the defaults
 or those chosen by a user) will result in output where the text 'disappears',
 because the foreground and background colours are the same.  There is no way
 to detect terminal colours and so this is always a danger.  See
