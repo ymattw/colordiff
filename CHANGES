@@ -58,7 +58,7 @@ functionality?  This change also fixes the bug which means that
 colordiff returns the 'diff' return value correctly.
 
 Inclusion of separate 'cdiff' shell script for colouring compressed and
-URL-based diffs, following contribution from Ville Skytt‰
+URL-based diffs, following contribution from Ville Skytt√§
 <ville.skytta@iki.fi>
 
 Changes between version 1.0.5 and 1.0.6
@@ -104,7 +104,7 @@ thanks to Gergely Nagy for contributed code.
 
 Changes between version 1.0.10 and 1.0.11
 
-Support for xz in cdiff, patch by Ville Skytt‰; code cleanup from Akim Demaille;
+Support for xz in cdiff, patch by Ville Skytt√§; code cleanup from Akim Demaille;
 patch to provide custom diff command from Rainer Nagel.  Improved wdiff support
 inspired by patch from Peter van Dijk.  Improved debdiff detection.
 
