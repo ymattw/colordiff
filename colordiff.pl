@@ -332,6 +332,35 @@ if ($diff_type eq 'diffy') {
             }
         }
     }
+    # If we don't find a suitable separator column then
+    # we've probably misidentified the input as diffy
+    # FIXME Search stream again, this time excluding diffy
+    # as a possible outcome??
+    if ($diffy_sep_col == 0) {
+DIFF_TYPE_NOT_DIFFY: foreach $record (@inputstream) {
+                         if ($record =~ /^(\+\+\+ |--- |@@ )/) {
+                             $diff_type = 'diffu';
+                             last DIFF_TYPE_NOT_DIFFY;
+                         }
+                         elsif ($record =~ /^\*\*\*/) {
+                             $diff_type = 'diffc';
+                             last DIFF_TYPE_NOT_DIFFY;
+                         }
+                         elsif ($record =~ /^[0-9,]+[acd][0-9,]+$/) {
+                             $diff_type = 'diff';
+                             last DIFF_TYPE_NOT_DIFFY;
+                         }
+                         elsif ($record =~ /\[-.*?-\]/s
+                                 || $record =~ /\{\+.*?\+\}/s) {
+                             $diff_type = 'wdiff';
+                             last DIFF_TYPE_NOT_DIFFY;
+                         }
+                         elsif ($record =~ /^Control files: lines which differ/) {
+                             $diff_type = 'debdiff';
+                             last DIFF_TYPE_NOT_DIFFY;
+                         }
+                     }
+    }
 }
 # ------------------------------------------------------------------------------
 
