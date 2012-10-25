@@ -1,0 +1,123 @@
+==== //eng/main/src/perl/third/Proc-Simple-1.19/Simple.pm#1 (binary+D) - //eng/main/src/perl/third/Proc-Simple-1.19/Simple.pm#6 (text) ==== content
+d24 1
+a24 7
+   $myproc = Proc::Simple->new(reap_only_on_poll => 0);
+                                         # Create a new process object
+
+   $myproc = Proc::Simple->new();
+                                         # Create a new process object
+                                         # with THE_REAPER sigchld handler
+                                         # disabled. SEE WARNING BELOW
+d49 3
+d57 1
+a57 1
+   $myproc = Proc::Simple->new(reap_only_on_poll => 0);
+d86 1
+a86 17
+and returns I<1> if it is, I<0> if it's not.
+
+If the user is going to wait for the process to end by calling poll()
+until exit then it is much safer to create the process as follows:
+
+   $myproc = Proc::Simple->new(reap_only_on_poll => 1);
+
+OR
+
+   $myproc = Proc::Simple->new();
+
+This will avoid signal handling bugginess by not making THE_REAPER the
+handler for SIGCHLD. THE_REAPER will then only be called from poll().
+WARNING: If you don't wait for your processes to end with poll
+this will leave zombie children.
+
+Finally,
+a112 4
+use English;
+use Log::Log4perl;
+my $log = Log::Log4perl->get_logger(__PACKAGE__);
+
+d120 1
+a120 1
+# Globals: The mysterious waitpid nohang constant.
+d122 1
+d142 2
+a143 1
+  $proc = Proc::Simple->new(reap_only_on_poll => 0);
+d150 1
+a150 1
+sub new {
+d154 7
+a160 7
+  my $self  = {
+               kill_on_destroy => undef,
+               signal_on_destroy => undef,
+               pid => undef,
+               reap_only_on_poll => 1,
+               @_ #override defaults
+              };
+d236 2
+a237 4
+  if (!$self->{reap_only_on_poll}) {
+    # Reap Zombies automatically
+    $SIG{'CHLD'} = \&THE_REAPER;
+  }
+d249 1
+a249 1
+      $log->debug("forked pid $self->{pid}");
+d285 1
+a285 2
+          #$log->debug("kill(0,$self->{pid} succeeded");
+          #too noisy to always log
+d288 1
+a288 1
+          $log->debug("kill(0, $self->{pid}) failed: $ERRNO");
+d291 1
+a291 1
+     $log->debug("pid not defined.");
+d296 1
+d331 1
+a331 1
+      $log->debug("kill($sig, $self->{'pid'}) OK");
+d333 1
+a333 1
+      $log->debug("kill(0,$self->{'pid'}) failed: $ERRNO");
+d438 1
+a438 1
+        $log->debug("Kill on DESTROY");
+d442 1
+a442 1
+            $log->debug("Sending KILL");
+d446 2
+a447 6
+
+    if (!defined $self->{reap_only_on_poll}) {
+      $log->debug("deleting exit status for $self->{pid}");
+      delete $EXIT_STATUS{ $self->pid };
+      $DESTROYED{ $self->pid } = 1;
+    }
+a464 2
+        $self->THE_REAPER();
+
+d498 1
+a498 1
+                $log->debug("Reaped in destructor: $pid");
+d501 1
+a501 1
+
+d503 1
+d505 1
+a505 2
+            my $res = waitpid($pid, $WNOHANG);
+            if($res > 0) {
+d508 1
+a508 1
+                $log->debug("reaped pid: $pid. Result: $res. Status: $EXIT_STATUS{$pid}");
+d510 1
+a510 2
+              #$log->debug("waitpid on pid $pid returned $res");
+              # too noisy
+d512 2
+a513 2
+       }
+    } else {
+d525 19

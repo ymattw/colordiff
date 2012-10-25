@@ -1,0 +1,396 @@
+==== //eng/main/src/perl/third/Proc-Simple-1.19/Simple.pm#1 (binary+D) - //eng/main/src/perl/third/Proc-Simple-1.19/Simple.pm#6 (text) ==== content
+***************
+*** 21,27 ****
+  
+     use Proc::Simple;
+  
+!    $myproc = Proc::Simple->new();        # Create a new process object
+  
+     $myproc->start("shell-command-line"); # Launch an external program
+     $myproc->start("command",             # Launch an external program
+--- 21,33 ----
+  
+     use Proc::Simple;
+  
+!    $myproc = Proc::Simple->new(reap_only_on_poll => 0);
+!                                          # Create a new process object
+! 
+!    $myproc = Proc::Simple->new();
+!                                          # Create a new process object
+!                                          # with THE_REAPER sigchld handler
+!                                          # disabled. SEE WARNING BELOW
+  
+     $myproc->start("shell-command-line"); # Launch an external program
+     $myproc->start("command",             # Launch an external program
+***************
+*** 46,60 ****
+  
+     $myproc->exit_status();               # Return exit status of process
+  
+- 
+-    Proc::Simple::debug($level);          # Turn debug on
+- 
+  =head1 DESCRIPTION
+  
+  The Proc::Simple package provides objects mimicing real-life
+  processes from a user's point of view. A new process object is created by
+  
+!    $myproc = Proc::Simple->new();
+  
+  Either external programs or perl subroutines can be launched and
+  controlled as processes in the background.
+--- 52,63 ----
+  
+     $myproc->exit_status();               # Return exit status of process
+  
+  =head1 DESCRIPTION
+  
+  The Proc::Simple package provides objects mimicing real-life
+  processes from a user's point of view. A new process object is created by
+  
+!    $myproc = Proc::Simple->new(reap_only_on_poll => 0);
+  
+  Either external programs or perl subroutines can be launched and
+  controlled as processes in the background.
+***************
+*** 83,89 ****
+  
+     $running = $myproc->poll();
+  
+! and returns I<1> if it is, I<0> if it's not. Finally, 
+  
+     $myproc->kill();
+  
+--- 86,108 ----
+  
+     $running = $myproc->poll();
+  
+! and returns I<1> if it is, I<0> if it's not.
+! 
+! If the user is going to wait for the process to end by calling poll()
+! until exit then it is much safer to create the process as follows:
+! 
+!    $myproc = Proc::Simple->new(reap_only_on_poll => 1);
+! 
+! OR
+! 
+!    $myproc = Proc::Simple->new();
+! 
+! This will avoid signal handling bugginess by not making THE_REAPER the
+! handler for SIGCHLD. THE_REAPER will then only be called from poll().
+! WARNING: If you don't wait for your processes to end with poll
+! this will leave zombie children.
+! 
+! Finally,
+  
+     $myproc->kill();
+  
+***************
+*** 110,115 ****
+--- 129,138 ----
+  use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXIT_STATUS 
+              %DESTROYED);
+  
++ use English;
++ use Log::Log4perl;
++ my $log = Log::Log4perl->get_logger(__PACKAGE__);
++ 
+  require Exporter;
+  
+  @ISA     = qw(Exporter AutoLoader);
+***************
+*** 117,125 ****
+  $VERSION = '1.19';
+  
+  ######################################################################
+! # Globals: Debug and the mysterious waitpid nohang constant.
+  ######################################################################
+- my $Debug = 0;
+  my $WNOHANG = get_system_nohang();
+  
+  ######################################################################
+--- 140,147 ----
+  $VERSION = '1.19';
+  
+  ######################################################################
+! # Globals: The mysterious waitpid nohang constant.
+  ######################################################################
+  my $WNOHANG = get_system_nohang();
+  
+  ######################################################################
+***************
+*** 139,163 ****
+  or
+  
+    $proc = Proc::Simple->new();
+! 
+! It takes no arguments.
+  
+  =cut
+  
+  ######################################################################
+  # $proc_obj=Proc::Simple->new(); - Constructor
+  ######################################################################
+! sub new { 
+    my $proto = shift;
+    my $class = ref($proto) || $proto;
+  
+!   my $self  = {};
+!   
+!   # Init instance variables
+!   $self->{'kill_on_destroy'}   = undef;
+!   $self->{'signal_on_destroy'} = undef;
+!   $self->{'pid'}               = undef;
+! 
+    bless($self, $class);
+  }
+  
+--- 161,184 ----
+  or
+  
+    $proc = Proc::Simple->new();
+!   $proc = Proc::Simple->new(reap_only_on_poll => 0);
+  
+  =cut
+  
+  ######################################################################
+  # $proc_obj=Proc::Simple->new(); - Constructor
+  ######################################################################
+! sub new {
+    my $proto = shift;
+    my $class = ref($proto) || $proto;
+  
+!   my $self  = {
+!                kill_on_destroy => undef,
+!                signal_on_destroy => undef,
+!                pid => undef,
+!                reap_only_on_poll => 1,
+!                @_ #override defaults
+!               };
+    bless($self, $class);
+  }
+  
+***************
+*** 233,240 ****
+    my $self  = shift;
+    my ($func, @params) = @_;
+  
+!   # Reap Zombies automatically
+!   $SIG{'CHLD'} = \&THE_REAPER;
+  
+    # Fork a child process
+    if(($self->{'pid'}=fork()) == 0) { # Child
+--- 254,263 ----
+    my $self  = shift;
+    my ($func, @params) = @_;
+  
+!   if (!$self->{reap_only_on_poll}) {
+!     # Reap Zombies automatically
+!     $SIG{'CHLD'} = \&THE_REAPER;
+!   }
+  
+    # Fork a child process
+    if(($self->{'pid'}=fork()) == 0) { # Child
+***************
+*** 246,252 ****
+            exit 0;                    # In case something goes wrong
+        }
+    } elsif($self->{'pid'} > 0) {      # Parent:
+!       $self->dprt("START($self->{'pid'})");
+        # Register PID
+        $EXIT_STATUS{$self->{'pid'}} = undef;
+        return 1;                      #   return OK
+--- 269,275 ----
+            exit 0;                    # In case something goes wrong
+        }
+    } elsif($self->{'pid'} > 0) {      # Parent:
+!       $log->debug("forked pid $self->{pid}");
+        # Register PID
+        $EXIT_STATUS{$self->{'pid'}} = undef;
+        return 1;                      #   return OK
+***************
+*** 282,299 ****
+  
+    if(defined($self->{'pid'})) {
+        if(kill(0, $self->{'pid'})) {
+!           $self->dprt("POLL($self->{'pid'}) RESPONDING");
+  	  return 1;
+        } else {
+!           $self->dprt("POLL($self->{'pid'}) NOT RESPONDING");
+        }
+    } else {
+!      $self->dprt("POLL(NOT DEFINED)");
+    }
+  
+    0;
+  }
+- 
+  ######################################################################
+  
+  =item kill
+--- 305,322 ----
+  
+    if(defined($self->{'pid'})) {
+        if(kill(0, $self->{'pid'})) {
+!           #$log->debug("kill(0,$self->{pid} succeeded");
+!           #too noisy to always log
+  	  return 1;
+        } else {
+!           $log->debug("kill(0, $self->{pid}) failed: $ERRNO");
+        }
+    } else {
+!      $log->debug("pid not defined.");
+    }
+  
+    0;
+  }
+  ######################################################################
+  
+  =item kill
+***************
+*** 328,336 ****
+  
+    # Send signal
+    if(kill($sig, $self->{'pid'})) {
+!       $self->dprt("KILL($self->{'pid'}) OK");
+    } else {
+!       $self->dprt("KILL($self->{'pid'}) failed");
+        return 0;
+    }
+  
+--- 351,359 ----
+  
+    # Send signal
+    if(kill($sig, $self->{'pid'})) {
+!       $log->debug("kill($sig, $self->{'pid'}) OK");
+    } else {
+!       $log->debug("kill(0,$self->{'pid'}) failed: $ERRNO");
+        return 0;
+    }
+  
+***************
+*** 435,450 ****
+      # If the kill_on_destroy flag is true then
+      # We need to send a signal to the process
+      if ($self->kill_on_destroy) {
+!         $self->dprt("Kill on DESTROY");
+          if (defined $self->signal_on_destroy) {
+              $self->kill($self->signal_on_destroy);
+          } else {
+!             $self->dprt("Sending KILL");
+              $self->kill;
+          }
+      }
+!     delete $EXIT_STATUS{ $self->pid };
+!     $DESTROYED{ $self->pid } = 1;
+  }
+  
+  ######################################################################
+--- 458,477 ----
+      # If the kill_on_destroy flag is true then
+      # We need to send a signal to the process
+      if ($self->kill_on_destroy) {
+!         $log->debug("Kill on DESTROY");
+          if (defined $self->signal_on_destroy) {
+              $self->kill($self->signal_on_destroy);
+          } else {
+!             $log->debug("Sending KILL");
+              $self->kill;
+          }
+      }
+! 
+!     if (!defined $self->{reap_only_on_poll}) {
+!       $log->debug("deleting exit status for $self->{pid}");
+!       delete $EXIT_STATUS{ $self->pid };
+!       $DESTROYED{ $self->pid } = 1;
+!     }
+  }
+  
+  ######################################################################
+***************
+*** 462,467 ****
+--- 489,496 ----
+  ######################################################################
+  sub exit_status{
+          my( $self ) = @_;
++         $self->THE_REAPER();
++ 
+          return $EXIT_STATUS{ $self->pid };
+  }
+  
+***************
+*** 495,516 ****
+              if(my $res = waitpid($pid, $WNOHANG) > 0) {
+                  # We reaped a zombie
+                  delete $DESTROYED{$pid};
+!                 dprt("", "Reaped: $pid");
+              }
+          }
+!         
+          foreach my $pid (keys %EXIT_STATUS) {
+-             dprt("", "Trying to reap $pid");
+              next if defined $EXIT_STATUS{$pid};
+!             if(my $res = waitpid($pid, $WNOHANG) > 0) {
+                  # We reaped a truly running process
+                  $EXIT_STATUS{$pid} = $?;
+!                 dprt("", "Reaped: $pid");
+              } else {
+!                 dprt("", "waitpid returned $res");
+              }
+!         }
+!     } else { 
+          # If we don't have $WNOHANG, we don't have a choice anyway.
+          # Just reap everything.
+          $child = wait();
+--- 524,546 ----
+              if(my $res = waitpid($pid, $WNOHANG) > 0) {
+                  # We reaped a zombie
+                  delete $DESTROYED{$pid};
+!                 $log->debug("Reaped in destructor: $pid");
+              }
+          }
+! 
+          foreach my $pid (keys %EXIT_STATUS) {
+              next if defined $EXIT_STATUS{$pid};
+!             my $res = waitpid($pid, $WNOHANG);
+!             if($res > 0) {
+                  # We reaped a truly running process
+                  $EXIT_STATUS{$pid} = $?;
+!                 $log->debug("reaped pid: $pid. Result: $res. Status: $EXIT_STATUS{$pid}");
+              } else {
+!               #$log->debug("waitpid on pid $pid returned $res");
+!               # too noisy
+              }
+!        }
+!     } else {
+          # If we don't have $WNOHANG, we don't have a choice anyway.
+          # Just reap everything.
+          $child = wait();
+***************
+*** 522,546 ****
+      # $SIG{'CHLD'} = \&THE_REAPER;
+  }
+  
+- ######################################################################
+- 
+- =item debug
+- 
+- Switches debug messages on and off -- Proc::Simple::debug(1) switches
+- them on, Proc::Simple::debug(0) keeps Proc::Simple quiet.
+- 
+- =cut
+- 
+- # Proc::Simple::debug($level) - Turn debug on/off
+- sub debug { $Debug = shift; }
+- 
+- ######################################################################
+- # Internal debug print function
+- ######################################################################
+- sub dprt {
+-   my $self = shift;
+-   print ref($self), "> @_\n" if $Debug;
+- }
+  
+  ######################################################################
+  sub get_system_nohang {
+--- 552,557 ----
