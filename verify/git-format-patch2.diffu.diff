@@ -1,0 +1,126 @@
+From 9ce654dc197c3cc4ab74dd8da80f28ea404d703e Mon Sep 17 00:00:00 2001
+From: Dave Ewart <davee@sungate.co.uk>
+Date: Mon, 15 Oct 2012 19:48:00 +0100
+Subject: [PATCH] Packaging refactoring and minor packaging fixes.
+
+---
+ CHANGES       |    4 ++++
+ Makefile      |    3 +++
+ README        |    7 -------
+ cdiff.xml     |    2 +-
+ colordiff.pl  |    4 ++--
+ colordiff.xml |   20 ++++++++++----------
+ 6 files changed, 20 insertions(+), 20 deletions(-)
+
+diff --git a/CHANGES b/CHANGES
+index baf3854..fcd9013 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -108,5 +108,9 @@ Support for xz in cdiff, patch by Ville Skytt
+ patch to provide custom diff command from Rainer Nagel.  Improved wdiff support
+ inspired by patch from Peter van Dijk.  Improved debdiff detection.
+ 
++Changes between version 1.0.11 and 1.0.12
++
++Packaging refactoring and minor packaging fixes.
++
+ # vim: tw=72
+ 
+diff --git a/Makefile b/Makefile
+index 18e71e5..be3dbae 100644
+--- a/Makefile
++++ b/Makefile
+@@ -52,5 +52,8 @@ dist:
+ 	tar -zcvf ${TARBALL} ${TMPDIR}
+ 	rm -fR ${TMPDIR}
+ 
++gitclean:
++	rm -f colordiff.1 colordiff.html cdiff.1
++
+ clean:
+ 	rm -f README colordiff.1 colordiff.html cdiff.1
+diff --git a/README b/README
+index 75205da..830a153 100644
+--- a/README
++++ b/README
+@@ -86,10 +86,3 @@ Bugs
+ 
+ Bug reports and suggestions/patches to <davee@sungate.co.uk> please.
+ 
+-Author
+-
+-colordiff is written and maintained by Dave Ewart <davee@sungate.co.uk>. This
+-manual page and the source XML was written by Graham Wilson <graham@mknod.org>
+-for Debian and is maintained by the author. Dave Ewart maintains the Debian
+-package, sponsored by Colin Tuckley.
+-
+diff --git a/cdiff.xml b/cdiff.xml
+index eb747bd..03b613e 100644
+--- a/cdiff.xml
++++ b/cdiff.xml
+@@ -19,7 +19,7 @@
+         <author>
+             <firstname>Dave</firstname>
+             <surname>Ewart</surname>
+-            <contrib>colordiff author, Debian packager for colordiff/cdiff</contrib>
++            <contrib>colordiff author, packager for colordiff/cdiff</contrib>
+         </author>
+     </authorgroup>
+     <productname>cdiff</productname>
+diff --git a/colordiff.pl b/colordiff.pl
+index 6ace51b..27ea161 100755
+--- a/colordiff.pl
++++ b/colordiff.pl
+@@ -26,10 +26,10 @@ use Getopt::Long qw(:config pass_through);
+ use IPC::Open2;
+ 
+ my $app_name     = 'colordiff';
+-my $version      = '1.0.11';
++my $version      = '1.0.12';
+ my $author       = 'Dave Ewart';
+ my $author_email = 'davee@sungate.co.uk';
+-my $app_www      = 'http://colordiff.sourceforge.net/';
++my $app_www      = 'http://www.colordiff.org/';
+ my $copyright    = '(C)2002-2012';
+ my $show_banner  = 1;
+ my $color_patch  = 0;
+diff --git a/colordiff.xml b/colordiff.xml
+index 795bd0c..e8695ab 100644
+--- a/colordiff.xml
++++ b/colordiff.xml
+@@ -16,6 +16,16 @@
+             <surname>Ewart</surname>
+             <contrib>colordiff author and Debian packager</contrib>
+         </author>
++        <author>
++            <firstname>Graham</firstname>
++            <surname>Wilson</surname>
++            <contrib>Manual page and XML source author</contrib>
++        </author>
++        <author>
++            <firstname>Colin</firstname>
++            <surname>Tuckley</surname>
++            <contrib>Debian package sponsor</contrib>
++        </author>
+     </authorgroup>
+     <productname>colordiff</productname>
+   </refentryinfo>
+@@ -159,15 +169,5 @@ please.</para>
+ 
+ </refsect1>
+ 
+-<refsect1 id='author'><title>Author</title>
+-
+-<para>&colordiff; is written and maintained by Dave Ewart
+-<email>davee@sungate.co.uk</email>. This manual page and the
+-source XML was written by Graham Wilson <email>graham@mknod.org</email> for
+-Debian and is maintained by the author.  Dave Ewart maintains the Debian
+-package, sponsored by Colin Tuckley.</para>
+-
+-</refsect1>
+-
+ </refentry>
+ <!-- vim:set ts=2 sw=2 et: -->
+-- 
+1.7.2.5
+

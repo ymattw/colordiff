@@ -1,0 +1,16 @@
+Subject: [PATCH 2/2] cdiff.sh: Fix FSF address in copyright notice.
+
+---
+ cdiff.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cdiff.sh b/cdiff.sh
+index 898a2a4..e88bf06 100755
+--- a/cdiff.sh
++++ b/cdiff.sh
+@@ -17,7 +17,7 @@
+[...]
+
+It's the "---" before the "cdiff.sh | 2 +-" line that caused the
+accidental correct detection earlier, and now it's the " | " in the
+"cdiff.sh | 2 +-" that causes the "diffy" detection.
