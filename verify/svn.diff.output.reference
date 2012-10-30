@@ -1,0 +1,41 @@
+[1;32mIndex: colordiff.pl[0;0m
+[1;32m===================================================================[0;0m
+[1;31m--- colordiff.pl	(revision 80)[0;0m
+[1;34m+++ colordiff.pl	(working copy)[0;0m
+[1;35m@@ -3,6 +3,7 @@[0;0m
+[1;37m # $Id: svn.diff,v 1.1.2.1 2003/03/18 15:08:54 daveewart Exp $[0;0m
+[1;37m [0;0m
+[1;37m ########################################################################[0;0m
+[1;34m+hello[0;0m
+[1;37m #                                                                      #[0;0m
+[1;37m # ColorDiff - a wrapper/replacment for 'diff' producing                #[0;0m
+[1;37m #             colourful output                                         #[0;0m
+[1;35m@@ -142,20 +143,6 @@[0;0m
+[1;37m         elsif (/^diff /) {[0;0m
+[1;37m             $diff_type = 'basic';[0;0m
+[1;37m         }[0;0m
+[1;31m-    }[0;0m
+[1;31m-    elsif ($diff_type eq 'c') {[0;0m
+[1;31m-        if ($nrecs == 1) {[0;0m
+[1;31m-            print "$file_old";[0;0m
+[1;31m-        }[0;0m
+[1;31m-        elsif ($nrecs == 2) {[0;0m
+[1;31m-                print "$file_new";[0;0m
+[1;31m-        }[0;0m
+[1;31m-        elsif (/^- /) {[0;0m
+[1;31m-            print "$file_old";[0;0m
+[1;31m-        }[0;0m
+[1;31m-        elsif (/^\+ /) {[0;0m
+[1;31m-            print "$file_new";[0;0m
+[1;31m-        }[0;0m
+[1;37m         elsif (/^\*{4,}/) {[0;0m
+[1;37m             print "$diff_start";[0;0m
+[1;37m         }[0;0m
+[1;35m@@ -192,6 +179,7 @@[0;0m
+[1;37m         else {[0;0m
+[1;37m             print "$plain_text";[0;0m
+[1;37m         }[0;0m
+[1;34m+    world[0;0m
+[1;37m     }[0;0m
+[1;37m     elsif ($diff_type eq 'basic') {[0;0m
+[1;37m         if (/^</) {[0;0m

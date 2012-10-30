@@ -1,0 +1,8 @@
+File lists identical (after any substitutions)[0;0m
+[0;0m
+Control files: lines which differ (wdiff format)[0;0m
+------------------------------------------------[0;0m
+ [1;31m[-.-][0;0m[0;0m
+Installed-Size: [1;31m[-96-][0;0m [1;34m{+104+}[0;0m[0;0m
+Maintainer: [1;31m[-Graham Wilson <graham@debian.org>-][0;0m [1;34m{+Dave Ewart <davee@sungate.co.uk>+}[0;0m[0;0m
+Version: [1;31m[-1.0.4-4-][0;0m [1;34m{+1.0.7-1+}[0;0m[0;0m

@@ -1,0 +1,86 @@
+[1;37mName                                                                                    Name[0;0m
+[1;37m[0;0m
+[1;35mcolordiff ? a tool to colorize diff output                                          |   colordiff — a tool to colorize diff output[0;0m
+[1;37m[0;0m
+[1;37mSynopsis                                                                                Synopsis[0;0m
+[1;37m[0;0m
+[1;37mcolordiff [diff options] {file1} {file2}                                                colordiff [diff options] {file1} {file2}[0;0m
+[1;37m[0;0m
+[1;37mDescription                                                                             Description[0;0m
+[1;37m[0;0m
+[1;37mcolordiff is a wrapper for diff and produces the same output as diff but with           colordiff is a wrapper for diff and produces the same output as diff but with[0;0m
+[1;37mcoloured syntax highlighting at the command line to improve readability. The            coloured syntax highlighting at the command line to improve readability. The[0;0m
+[1;37moutput is similar to how a diff-generated patch might appear in Vim or Emacs            output is similar to how a diff-generated patch might appear in Vim or Emacs[0;0m
+[1;37mwith the appropriate syntax highlighting options enabled. The colour schemes            with the appropriate syntax highlighting options enabled. The colour schemes[0;0m
+[1;37mcan be read from a central configuration file or from a local user ~                    can be read from a central configuration file or from a local user ~[0;0m
+[1;37m/.colordiffrc file.                                                                     /.colordiffrc file.[0;0m
+[1;37m[0;0m
+[1;37mcolordiff makes use of ANSI colours and as such will only work when ANSI                colordiff makes use of ANSI colours and as such will only work when ANSI[0;0m
+[1;37mcolours can be used - typical examples are xterms and Eterms, as well as                colours can be used - typical examples are xterms and Eterms, as well as[0;0m
+[1;37mconsole sessions.                                                                       console sessions.[0;0m
+[1;37m[0;0m
+[1;37mcolordiff has been tested on various flavours of Linux and under OpenBSD, but           colordiff has been tested on various flavours of Linux and under OpenBSD, but[0;0m
+[1;37mshould be broadly portable to other systems.                                            should be broadly portable to other systems.[0;0m
+[1;37m[0;0m
+[1;37mUsage                                                                                   Usage[0;0m
+[1;37m[0;0m
+[1;37mUse colordiff wherever you would normally use diff, or pipe output to                   Use colordiff wherever you would normally use diff, or pipe output to[0;0m
+[1;37mcolordiff:                                                                              colordiff:[0;0m
+[1;37m[0;0m
+[1;37mFor example:                                                                            For example:[0;0m
+[1;37m[0;0m
+[1;37m$ colordiff file1 file2                                                                 $ colordiff file1 file2[0;0m
+[1;37m$ diff -u file1 file2 | colordiff                                                       $ diff -u file1 file2 | colordiff[0;0m
+[1;37m[0;0m
+[1;37mYou can pipe the output to 'less', using the '-R' option (some systems or               You can pipe the output to 'less', using the '-R' option (some systems or[0;0m
+[1;37mterminal types may get better results using '-r' instead), which keeps the              terminal types may get better results using '-r' instead), which keeps the[0;0m
+[1;37mcolour escape sequences, otherwise displayed incorrectly or discarded by                colour escape sequences, otherwise displayed incorrectly or discarded by[0;0m
+[1;37m'less':                                                                                 'less':[0;0m
+[1;37m[0;0m
+[1;37m$ diff -u file1 file2 | colordiff | less -R                                             $ diff -u file1 file2 | colordiff | less -R[0;0m
+[1;37m[0;0m
+[1;37mYou may find it useful to make diff automatically call colordiff. Add the               You may find it useful to make diff automatically call colordiff. Add the[0;0m
+[1;37mfollowing line to ~/.bashrc (or equivalent):                                            following line to ~/.bashrc (or equivalent):[0;0m
+[1;37m[0;0m
+[1;37malias diff=colordiff                                                                    alias diff=colordiff[0;0m
+[1;37m[0;0m
+[1;37mAny options passed to colordiff are passed through to diff.                             Any options passed to colordiff are passed through to diff.[0;0m
+[1;37m[0;0m
+[1;37mAlternatively, a construct such as 'cvs diff SOMETHING | colordiff' can be              Alternatively, a construct such as 'cvs diff SOMETHING | colordiff' can be[0;0m
+[1;37mincluded in ~/.bashrc as follows:                                                       included in ~/.bashrc as follows:[0;0m
+[1;37m[0;0m
+[1;37mfunction cvsdiff () { cvs diff $@ | colordiff; }                                        function cvsdiff () { cvs diff $@ | colordiff; }[0;0m
+[1;37m[0;0m
+[1;37mOr, combining the idea above using 'less':                                              Or, combining the idea above using 'less':[0;0m
+[1;37m[0;0m
+[1;37mfunction cvsdiff () { cvs diff $@ | colordiff |less -R; }                               function cvsdiff () { cvs diff $@ | colordiff |less -R; }[0;0m
+[1;37m[0;0m
+[1;37mNote that the function name, cvsdiff, can be customized.                                Note that the function name, cvsdiff, can be customized.[0;0m
+[1;37m[0;0m
+[1;37mFiles                                                                                   Files[0;0m
+[1;37m[0;0m
+[1;37m/etc/colordiffrc                                                                        /etc/colordiffrc[0;0m
+[1;37m[0;0m
+[1;37m    Central configuration file. User-specific settings can be enabled by                    Central configuration file. User-specific settings can be enabled by[0;0m
+[1;37m    copying this file to ~/.colordiffrc and making the appropriate changes.                 copying this file to ~/.colordiffrc and making the appropriate changes.[0;0m
+[1;37m[0;0m
+[1;34m                                                                                    >   colordiffrc-lightbg[0;0m
+[1;34m                                                                                    >[0;0m
+[1;34m                                                                                    >       Alternate configuration template for use with terminals having light[0;0m
+[1;34m                                                                                    >       backgrounds. Copy this to /etc/colordiffrc or ~/.colordiffrc and customize.[0;0m
+[1;34m                                                                                    >[0;0m
+[1;37mBugs                                                                                    Bugs[0;0m
+[1;37m[0;0m
+[1;37mBug reports and suggestions/patches to <davee@sungate.co.uk> please.                    Bug reports and suggestions/patches to <davee@sungate.co.uk> please.[0;0m
+[1;37m[0;0m
+[1;31mcolordiff does not work for side-by-side diffs (diff -y). Note that does not        <[0;0m
+[1;31mwork simply means that the resulting output will not be colour-highlighted --       <[0;0m
+[1;31mcorrect output will still be produced.                                              <[0;0m
+[1;31m                                                                                    <[0;0m
+[1;37mAuthor                                                                                  Author[0;0m
+[1;37m[0;0m
+[1;37mcolordiff is written and maintained by Dave Ewart <davee@sungate.co.uk>. This           colordiff is written and maintained by Dave Ewart <davee@sungate.co.uk>. This[0;0m
+[1;35mmanual page and the source XML was written by Graham Wilson <bob@decoy.wox.org>     |   manual page and the source XML was written by Graham Wilson <graham@mknod.org>[0;0m
+[1;35mfor Debian and is maintained by the author. Graham Wilson also maintains the        |   for Debian and is maintained by the author. Dave Ewart maintains the Debian[0;0m
+[1;35mDebian package for colordiff.                                                       |   package, sponsored by Graham Wilson.[0;0m
+[1;37m[0;0m

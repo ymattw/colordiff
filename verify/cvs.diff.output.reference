@@ -1,0 +1,9 @@
+[1;32mIndex: colordiff.pl[0;0m
+[1;32m===================================================================[0;0m
+[1;32mRCS file: /cvsroot/colordiff/colordiff/src/colordiff.pl,v[0;0m
+[1;32mretrieving revision 1.4.2.2[0;0m
+[1;32mdiff -r1.4.2.2 colordiff.pl[0;0m
+[1;35m33c33[0;0m
+[1;31m< my $version      = '1.0.1';[0;0m
+[1;37m---[0;0m
+[1;34m> my $version      = '1.0.2';[0;0m

@@ -1,0 +1,126 @@
+[1;37mFrom 9ce654dc197c3cc4ab74dd8da80f28ea404d703e Mon Sep 17 00:00:00 2001[0;0m
+[1;37mFrom: Dave Ewart <davee@sungate.co.uk>[0;0m
+[1;37mDate: Mon, 15 Oct 2012 19:48:00 +0100[0;0m
+[1;37mSubject: [PATCH] Packaging refactoring and minor packaging fixes.[0;0m
+[1;37m[0;0m
+[1;31m---[0;0m
+[1;37m CHANGES       |    4 ++++[0;0m
+[1;37m Makefile      |    3 +++[0;0m
+[1;37m README        |    7 -------[0;0m
+[1;37m cdiff.xml     |    2 +-[0;0m
+[1;37m colordiff.pl  |    4 ++--[0;0m
+[1;37m colordiff.xml |   20 ++++++++++----------[0;0m
+[1;37m 6 files changed, 20 insertions(+), 20 deletions(-)[0;0m
+[1;37m[0;0m
+[1;32mdiff --git a/CHANGES b/CHANGES[0;0m
+[1;37mindex baf3854..fcd9013 100644[0;0m
+[1;31m--- a/CHANGES[0;0m
+[1;34m+++ b/CHANGES[0;0m
+[1;35m@@ -108,5 +108,9 @@ Support for xz in cdiff, patch by Ville Skytt[0;0m
+[1;37m patch to provide custom diff command from Rainer Nagel.  Improved wdiff support[0;0m
+[1;37m inspired by patch from Peter van Dijk.  Improved debdiff detection.[0;0m
+[1;37m [0;0m
+[1;34m+Changes between version 1.0.11 and 1.0.12[0;0m
+[1;34m+[0;0m
+[1;34m+Packaging refactoring and minor packaging fixes.[0;0m
+[1;34m+[0;0m
+[1;37m # vim: tw=72[0;0m
+[1;37m [0;0m
+[1;32mdiff --git a/Makefile b/Makefile[0;0m
+[1;37mindex 18e71e5..be3dbae 100644[0;0m
+[1;31m--- a/Makefile[0;0m
+[1;34m+++ b/Makefile[0;0m
+[1;35m@@ -52,5 +52,8 @@ dist:[0;0m
+[1;37m        tar -zcvf ${TARBALL} ${TMPDIR}[0;0m
+[1;37m        rm -fR ${TMPDIR}[0;0m
+[1;37m [0;0m
+[1;34m+gitclean:[0;0m
+[1;34m+       rm -f colordiff.1 colordiff.html cdiff.1[0;0m
+[1;34m+[0;0m
+[1;37m clean:[0;0m
+[1;37m        rm -f README colordiff.1 colordiff.html cdiff.1[0;0m
+[1;32mdiff --git a/README b/README[0;0m
+[1;37mindex 75205da..830a153 100644[0;0m
+[1;31m--- a/README[0;0m
+[1;34m+++ b/README[0;0m
+[1;35m@@ -86,10 +86,3 @@ Bugs[0;0m
+[1;37m [0;0m
+[1;37m Bug reports and suggestions/patches to <davee@sungate.co.uk> please.[0;0m
+[1;37m [0;0m
+[1;31m-Author[0;0m
+[1;31m-[0;0m
+[1;31m-colordiff is written and maintained by Dave Ewart <davee@sungate.co.uk>. This[0;0m
+[1;31m-manual page and the source XML was written by Graham Wilson <graham@mknod.org>[0;0m
+[1;31m-for Debian and is maintained by the author. Dave Ewart maintains the Debian[0;0m
+[1;31m-package, sponsored by Colin Tuckley.[0;0m
+[1;31m-[0;0m
+[1;32mdiff --git a/cdiff.xml b/cdiff.xml[0;0m
+[1;37mindex eb747bd..03b613e 100644[0;0m
+[1;31m--- a/cdiff.xml[0;0m
+[1;34m+++ b/cdiff.xml[0;0m
+[1;35m@@ -19,7 +19,7 @@[0;0m
+[1;37m         <author>[0;0m
+[1;37m             <firstname>Dave</firstname>[0;0m
+[1;37m             <surname>Ewart</surname>[0;0m
+[1;31m-            <contrib>colordiff author, Debian packager for colordiff/cdiff</contrib>[0;0m
+[1;34m+            <contrib>colordiff author, packager for colordiff/cdiff</contrib>[0;0m
+[1;37m         </author>[0;0m
+[1;37m     </authorgroup>[0;0m
+[1;37m     <productname>cdiff</productname>[0;0m
+[1;32mdiff --git a/colordiff.pl b/colordiff.pl[0;0m
+[1;37mindex 6ace51b..27ea161 100755[0;0m
+[1;31m--- a/colordiff.pl[0;0m
+[1;34m+++ b/colordiff.pl[0;0m
+[1;35m@@ -26,10 +26,10 @@ use Getopt::Long qw(:config pass_through);[0;0m
+[1;37m use IPC::Open2;[0;0m
+[1;37m [0;0m
+[1;37m my $app_name     = 'colordiff';[0;0m
+[1;31m-my $version      = '1.0.11';[0;0m
+[1;34m+my $version      = '1.0.12';[0;0m
+[1;37m my $author       = 'Dave Ewart';[0;0m
+[1;37m my $author_email = 'davee@sungate.co.uk';[0;0m
+[1;31m-my $app_www      = 'http://colordiff.sourceforge.net/';[0;0m
+[1;34m+my $app_www      = 'http://www.colordiff.org/';[0;0m
+[1;37m my $copyright    = '(C)2002-2012';[0;0m
+[1;37m my $show_banner  = 1;[0;0m
+[1;37m my $color_patch  = 0;[0;0m
+[1;32mdiff --git a/colordiff.xml b/colordiff.xml[0;0m
+[1;37mindex 795bd0c..e8695ab 100644[0;0m
+[1;31m--- a/colordiff.xml[0;0m
+[1;34m+++ b/colordiff.xml[0;0m
+[1;35m@@ -16,6 +16,16 @@[0;0m
+[1;37m             <surname>Ewart</surname>[0;0m
+[1;37m             <contrib>colordiff author and Debian packager</contrib>[0;0m
+[1;37m         </author>[0;0m
+[1;34m+        <author>[0;0m
+[1;34m+            <firstname>Graham</firstname>[0;0m
+[1;34m+            <surname>Wilson</surname>[0;0m
+[1;34m+            <contrib>Manual page and XML source author</contrib>[0;0m
+[1;34m+        </author>[0;0m
+[1;34m+        <author>[0;0m
+[1;34m+            <firstname>Colin</firstname>[0;0m
+[1;34m+            <surname>Tuckley</surname>[0;0m
+[1;34m+            <contrib>Debian package sponsor</contrib>[0;0m
+[1;34m+        </author>[0;0m
+[1;37m     </authorgroup>[0;0m
+[1;37m     <productname>colordiff</productname>[0;0m
+[1;37m   </refentryinfo>[0;0m
+[1;35m@@ -159,15 +169,5 @@ please.</para>[0;0m
+[1;37m [0;0m
+[1;37m </refsect1>[0;0m
+[1;37m [0;0m
+[1;31m-<refsect1 id='author'><title>Author</title>[0;0m
+[1;31m-[0;0m
+[1;31m-<para>&colordiff; is written and maintained by Dave Ewart[0;0m
+[1;31m-<email>davee@sungate.co.uk</email>. This manual page and the[0;0m
+[1;31m-source XML was written by Graham Wilson <email>graham@mknod.org</email> for[0;0m
+[1;31m-Debian and is maintained by the author.  Dave Ewart maintains the Debian[0;0m
+[1;31m-package, sponsored by Colin Tuckley.</para>[0;0m
+[1;31m-[0;0m
+[1;31m-</refsect1>[0;0m
+[1;31m-[0;0m
+[1;37m </refentry>[0;0m
+[1;37m <!-- vim:set ts=2 sw=2 et: -->[0;0m
+[1;31m-- [0;0m
+[1;37m1.7.2.5[0;0m
+[1;37m[0;0m

@@ -1,0 +1,16 @@
+[1;37mSubject: [PATCH 2/2] cdiff.sh: Fix FSF address in copyright notice.[0;0m
+[1;37m[0;0m
+[1;31m---[0;0m
+[1;37m cdiff.sh | 2 +-[0;0m
+[1;37m 1 file changed, 1 insertion(+), 1 deletion(-)[0;0m
+[1;37m[0;0m
+[1;32mdiff --git a/cdiff.sh b/cdiff.sh[0;0m
+[1;37mindex 898a2a4..e88bf06 100755[0;0m
+[1;31m--- a/cdiff.sh[0;0m
+[1;34m+++ b/cdiff.sh[0;0m
+[1;35m@@ -17,7 +17,7 @@[0;0m
+[1;37m[...][0;0m
+[1;37m[0;0m
+[1;37mIt's the "---" before the "cdiff.sh | 2 +-" line that caused the[0;0m
+[1;37maccidental correct detection earlier, and now it's the " | " in the[0;0m
+[1;37m"cdiff.sh | 2 +-" that causes the "diffy" detection.[0;0m

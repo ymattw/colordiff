@@ -1,0 +1,24 @@
+[1;31m--- Makefile	2002-10-30 09:08:52.000000000 +0000[0;0m
+[1;34m+++ Makefile2	2003-03-18 14:23:33.000000000 +0000[0;0m
+[1;35m@@ -2,7 +2,6 @@[0;0m
+[1;37m [0;0m
+[1;37m INSTALL_DIR=/usr/local/bin[0;0m
+[1;37m ETC_DIR=/etc[0;0m
+[1;31m-VERSION=1.0[0;0m
+[1;37m DIST_FILES=COPYING INSTALL Makefile README \[0;0m
+[1;37m 	colordiff.pl colordiffrc BUGS TODO CHANGES[0;0m
+[1;37m TMPDIR=colordiff-${VERSION}[0;0m
+[1;35m@@ -12,11 +11,12 @@[0;0m
+[1;37m install:[0;0m
+[1;37m 	install colordiff.pl ${INSTALL_DIR}/colordiff[0;0m
+[1;37m 	cp colordiffrc ${ETC_DIR}/colordiffrc[0;0m
+[1;31m-	chown root.root ${ETC_DIR}/colordiffrc[0;0m
+[1;34m+	chown root.root ${ETC_DIR}/colordifc[0;0m
+[1;37m 	chmod 644 ${ETC_DIR}/colordiffrc[0;0m
+[1;37m [0;0m
+[1;37m dist:[0;0m
+[1;37m 	mkdir ${TMPDIR}[0;0m
+[1;37m 	cp -p ${DIST_FILES} ${TMPDIR}[0;0m
+[1;37m 	tar -zcvf ${TARBALL} ${TMPDIR}[0;0m
+[1;34m+	asdfasd fa sdf asd f[0;0m
+[1;37m 	rm -fR ${TMPDIR}[0;0m
