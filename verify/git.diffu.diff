@@ -1,0 +1,42 @@
+diff --git a/colordiff.pl b/colordiff.pl
+index ae9cbd6..a9c4b41 100755
+--- a/colordiff.pl
++++ b/colordiff.pl
+@@ -102,6 +102,25 @@ sub check_for_file_arguments {
+     return $nonopts;
+ }
+ 
++my $enable_verifymode;
++my $specified_difftype;
++GetOptions(
++    # --enable-verifymode option is for testing behaviour of colordiff
++    # against standard test diffs
++    "verifymode" => \$enable_verifymode,
++    "difftype=s" => \$specified_difftype
++    # TODO - check that specified type is valid, issue warning if not
++);
++
++if (defined $enable_verifymode) {
++    # When in verify mode, to ensure consistent output we don't source
++    # any external config files, so we use built-in defaults
++    # and we add colour to our patches
++    @config_files = ();
++    $color_patch  = 1;
++    $show_banner  = 0;
++}
++
+ foreach $config_file (@config_files) {
+     if (open (COLORDIFFRC, "<$config_file")) {
+         while (<COLORDIFFRC>) {
+@@ -190,11 +209,6 @@ if ((-f STDOUT) && ($color_patch == 0)) {
+     $colour{off} = '';
+ }
+ 
+-my $specified_difftype;
+-GetOptions(
+-    "difftype=s" => \$specified_difftype
+-);
+-# TODO - check that specified type is valid, issue warning if not
+ 
+ # ----------------------------------------------------------------------------
+ 

@@ -1,0 +1,42 @@
+[1;32mdiff --git a/colordiff.pl b/colordiff.pl[0;0m
+[1;37mindex ae9cbd6..a9c4b41 100755[0;0m
+[1;31m--- a/colordiff.pl[0;0m
+[1;34m+++ b/colordiff.pl[0;0m
+[1;35m@@ -102,6 +102,25 @@ sub check_for_file_arguments {[0;0m
+[1;37m     return $nonopts;[0;0m
+[1;37m }[0;0m
+[1;37m [0;0m
+[1;34m+my $enable_verifymode;[0;0m
+[1;34m+my $specified_difftype;[0;0m
+[1;34m+GetOptions([0;0m
+[1;34m+    # --enable-verifymode option is for testing behaviour of colordiff[0;0m
+[1;34m+    # against standard test diffs[0;0m
+[1;34m+    "verifymode" => \$enable_verifymode,[0;0m
+[1;34m+    "difftype=s" => \$specified_difftype[0;0m
+[1;34m+    # TODO - check that specified type is valid, issue warning if not[0;0m
+[1;34m+);[0;0m
+[1;34m+[0;0m
+[1;34m+if (defined $enable_verifymode) {[0;0m
+[1;34m+    # When in verify mode, to ensure consistent output we don't source[0;0m
+[1;34m+    # any external config files, so we use built-in defaults[0;0m
+[1;34m+    # and we add colour to our patches[0;0m
+[1;34m+    @config_files = ();[0;0m
+[1;34m+    $color_patch  = 1;[0;0m
+[1;34m+    $show_banner  = 0;[0;0m
+[1;34m+}[0;0m
+[1;34m+[0;0m
+[1;37m foreach $config_file (@config_files) {[0;0m
+[1;37m     if (open (COLORDIFFRC, "<$config_file")) {[0;0m
+[1;37m         while (<COLORDIFFRC>) {[0;0m
+[1;35m@@ -190,11 +209,6 @@ if ((-f STDOUT) && ($color_patch == 0)) {[0;0m
+[1;37m     $colour{off} = '';[0;0m
+[1;37m }[0;0m
+[1;37m [0;0m
+[1;31m-my $specified_difftype;[0;0m
+[1;31m-GetOptions([0;0m
+[1;31m-    "difftype=s" => \$specified_difftype[0;0m
+[1;31m-);[0;0m
+[1;31m-# TODO - check that specified type is valid, issue warning if not[0;0m
+[1;37m [0;0m
+[1;37m # ----------------------------------------------------------------------------[0;0m
+[1;37m [0;0m
