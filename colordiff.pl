@@ -22,7 +22,7 @@
 ########################################################################
 
 use strict;
-use Getopt::Long qw(:config pass_through);
+use Getopt::Long qw(:config pass_through no_auto_abbrev);
 use IPC::Open2;
 
 my $app_name     = 'colordiff';
