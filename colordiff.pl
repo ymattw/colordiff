@@ -98,6 +98,9 @@ sub check_for_file_arguments {
         if ($arg !~ /^-/) {
             $nonopts++;
         }
+        if ($arg eq "--help" || $arg eq "--version" || $arg eq "-v") {
+            $nonopts++;
+        }
     }
     return $nonopts;
 }
