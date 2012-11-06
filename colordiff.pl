@@ -115,6 +115,9 @@ sub detect_diff_type {
     my $allow_diffy = shift;
     my @is = @$isref;
 
+    # This may not be perfect - should identify most reasonably
+    # formatted diffs and patches
+
     foreach my $record (@is) {
         # Unified diffs are the only flavour having '+++ ' or '--- '
         # at the start of a line
@@ -134,6 +137,8 @@ sub detect_diff_type {
         # easily match non-diff output.
         # However, given that we have not yet matched any of the *other* diff
         # types, this might be good enough
+        #
+        # Only pick diffy if our flag parameter indicates so
         elsif ( ($allow_diffy == 1) && ($record =~ /(\s\|\s|\s<$|\s>\s)/) ) {
             return 'diffy';
         }
@@ -294,9 +299,6 @@ else {
 
 # Input stream has been read - need to examine it
 # to determine type of diff we have.
-#
-# This may not be perfect - should identify most reasonably
-# formatted diffs and patches
 
 my $record;
 my $longest_record = 0;
