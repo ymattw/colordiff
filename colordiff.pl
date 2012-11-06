@@ -69,6 +69,7 @@ my ($setting, $value);
 my @config_files = ("$etcdir/colordiffrc");
 push (@config_files, "$ENV{HOME}/.colordiffrc") if (defined $ENV{HOME});
 my $config_file;
+my $diff_type = 'unknown';
 
 # Convert tabs to spaces
 sub expand_tabs_to_spaces ($) {
@@ -103,6 +104,53 @@ sub check_for_file_arguments {
         }
     }
     return $nonopts;
+}
+
+sub detect_diff_type {
+    # Two parameters:
+    #    $isref       is reference to @inputstream
+    #    $allow_diffy is flag indicating whether diffy is a
+    #                   permitted diff type
+    my $isref = shift;
+    my $allow_diffy = shift;
+    my @is = @$isref;
+
+    foreach my $record (@is) {
+        # Unified diffs are the only flavour having '+++ ' or '--- '
+        # at the start of a line
+        if ($record =~ /^(\+\+\+ |--- |@@ )/) {
+            return 'diffu';
+        }
+        # Context diffs are the only flavour having '***'
+        # at the start of a line
+        elsif ($record =~ /^\*\*\*/) {
+            return 'diffc';
+        }
+        # Plain diffs have NcN, NdN and NaN etc.
+        elsif ($record =~ /^[0-9,]+[acd][0-9,]+$/) {
+            return 'diff';
+        }
+        # FIXME - This is not very specific, since the regex matches could
+        # easily match non-diff output.
+        # However, given that we have not yet matched any of the *other* diff
+        # types, this might be good enough
+        elsif ( ($allow_diffy == 1) && ($record =~ /(\s\|\s|\s<$|\s>\s)/) ) {
+            return 'diffy';
+        }
+        # wdiff deleted/added patterns
+        # should almost always be pairwise?
+        elsif ($record =~ /\[-.*?-\]/s
+                || $record =~ /\{\+.*?\+\}/s) {
+            return 'wdiff';
+        }
+        # FIXME - This is a bit risky, but if we haven't matched any other
+        # diff type by this stage, this line usually indicates we have
+        # debdiff output
+        elsif ($record =~ /^Control files: lines which differ/) {
+            return 'debdiff';
+        }
+    }
+    $diff_type = 'unknown';
 }
 
 my $enable_verifymode;
@@ -250,54 +298,15 @@ else {
 # This may not be perfect - should identify most reasonably
 # formatted diffs and patches
 
-my $diff_type = 'unknown';
 my $record;
 my $longest_record = 0;
 
-DIFF_TYPE: foreach $record (@inputstream) {
-    if (defined $specified_difftype) {
-        $diff_type = $specified_difftype;
-        last DIFF_TYPE;
-    }
-    # Unified diffs are the only flavour having '+++ ' or '--- '
-    # at the start of a line
-    if ($record =~ /^(\+\+\+ |--- |@@ )/) {
-        $diff_type = 'diffu';
-        last DIFF_TYPE;
-    }
-    # Context diffs are the only flavour having '***'
-    # at the start of a line
-    elsif ($record =~ /^\*\*\*/) {
-        $diff_type = 'diffc';
-        last DIFF_TYPE;
-    }
-    # Plain diffs have NcN, NdN and NaN etc.
-    elsif ($record =~ /^[0-9,]+[acd][0-9,]+$/) {
-        $diff_type = 'diff';
-        last DIFF_TYPE;
-    }
-    # FIXME - This is not very specific, since the regex matches could
-    # easily match non-diff output.
-    # However, given that we have not yet matched any of the *other* diff
-    # types, this might be good enough
-    elsif ($record =~ /(\s\|\s|\s<$|\s>\s)/) {
-        $diff_type = 'diffy';
-        last DIFF_TYPE;
-    }
-    # wdiff deleted/added patterns
-    # should almost always be pairwise?
-    elsif ($record =~ /\[-.*?-\]/s
-           || $record =~ /\{\+.*?\+\}/s) {
-        $diff_type = 'wdiff';
-        last DIFF_TYPE;
-    }
-    # FIXME - This is a bit risky, but if we haven't matched any other
-    # diff type by this stage, this line usually indicates we have
-    # debdiff output
-    elsif ($record =~ /^Control files: lines which differ/) {
-        $diff_type = 'debdiff';
-        last DIFF_TYPE;
-    }
+if (defined $specified_difftype) {
+    $diff_type = $specified_difftype;
+}
+else {
+    # Detect diff type, diffy is permitted
+    $diff_type = detect_diff_type(\@inputstream, 1);
 }
 
 my $inside_file_old = 1;
@@ -351,32 +360,11 @@ if ($diff_type eq 'diffy') {
     }
     # If we don't find a suitable separator column then
     # we've probably misidentified the input as diffy
-    # FIXME Search stream again, this time excluding diffy
-    # as a possible outcome??
+    # Search stream again, this time excluding diffy
+    # as a possible outcome
     if ($diffy_sep_col == 0) {
-DIFF_TYPE_NOT_DIFFY: foreach $record (@inputstream) {
-                         if ($record =~ /^(\+\+\+ |--- |@@ )/) {
-                             $diff_type = 'diffu';
-                             last DIFF_TYPE_NOT_DIFFY;
-                         }
-                         elsif ($record =~ /^\*\*\*/) {
-                             $diff_type = 'diffc';
-                             last DIFF_TYPE_NOT_DIFFY;
-                         }
-                         elsif ($record =~ /^[0-9,]+[acd][0-9,]+$/) {
-                             $diff_type = 'diff';
-                             last DIFF_TYPE_NOT_DIFFY;
-                         }
-                         elsif ($record =~ /\[-.*?-\]/s
-                                 || $record =~ /\{\+.*?\+\}/s) {
-                             $diff_type = 'wdiff';
-                             last DIFF_TYPE_NOT_DIFFY;
-                         }
-                         elsif ($record =~ /^Control files: lines which differ/) {
-                             $diff_type = 'debdiff';
-                             last DIFF_TYPE_NOT_DIFFY;
-                         }
-                     }
+        # Detect diff type, diffy is NOT permitted
+        $diff_type = detect_diff_type(\@inputstream, 0);
     }
 }
 # ------------------------------------------------------------------------------
