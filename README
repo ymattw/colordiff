@@ -24,7 +24,7 @@ should be broadly portable to other systems.
 
 Usage
 
-Use colordiff wherever you would normally use diff, or instead pipe output to 
+Use colordiff wherever you would normally use diff, or instead pipe output to
 colordiff:
 
 For example:
