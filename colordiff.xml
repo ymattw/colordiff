@@ -145,6 +145,17 @@ function cvsdiff () { cvs diff $@ | colordiff |less -R; }
 
 <para>Note that the function name, cvsdiff, can be customized.</para>
 
+<para>By default colordiff returns the exit code of the underlying diff
+invocation (if there is one), but there are some circumstances where it is
+useful to force colordiff's exit code to be zero: to do this use the option
+'--fakeexitcode':
+
+<screen>
+colordiff --fakeexitcode ...
+</screen>
+
+</para>
+
 </refsect1>
 
 <refsect1 id='files'><title>Files</title>

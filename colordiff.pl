@@ -160,10 +160,12 @@ sub detect_diff_type {
 
 my $enable_verifymode;
 my $specified_difftype;
+my $enable_fakeexitcode;
 GetOptions(
     # --enable-verifymode option is for testing behaviour of colordiff
     # against standard test diffs
     "verifymode" => \$enable_verifymode,
+    "fakeexitcode" => \$enable_fakeexitcode,
     "difftype=s" => \$specified_difftype
     # TODO - check that specified type is valid, issue warning if not
 );
@@ -490,5 +492,9 @@ foreach (@inputstream) {
     s/$/$colour{off}/;
     print "$_";
 }
-
-exit $exitcode;
+if (defined $enable_fakeexitcode) {
+    exit 0;
+}
+else {
+    exit $exitcode;
+}
